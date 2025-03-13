@@ -65,6 +65,8 @@ from ultralytics import YOLO
 import numpy as np
 from io import BytesIO
 from PIL import Image
+import torch.serialization
+from ultralytics.nn.tasks import DetectionModel
 
 app = FastAPI()
 
@@ -73,7 +75,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Jinja2 templates for rendering HTML
 templates = Jinja2Templates(directory="templates")
-
+torch.serialization.add_safe_globals([DetectionModel])
 # Load your YOLO model
 model = YOLO('best.pt')
 
