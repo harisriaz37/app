@@ -1,0 +1,93 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garbage Detection</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Garbage Detection</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file" accept="image/*" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="result">
+        <h2>Result:</h2>
+        <img id="resultImage" style="display:none;"/>
+        <pre id="predictions" style="display:none;"></pre>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        form.onsubmit = async (event) => {
+            event.preventDefault();
+            
+            const formData = new FormData(form);
+            const response = await fetch('/predict/', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const blob = await response.blob();
+            const img = document.getElementById('resultImage');
+            img.src = URL.createObjectURL(blob);
+            img.style.display = 'block';
+        };
+    </script>
+</body>
+</html>
+
+
+ -->
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Garbage Detection</title>
+     <link rel="stylesheet" href="/static/style.css">
+ </head>
+ <body>
+     <h1>Garbage Detection</h1>
+     <form id="uploadForm" enctype="multipart/form-data">
+         <input type="file" id="fileInput" name="file" accept="image/*" required>
+         <button type="submit">Submit</button>
+     </form>
+     <div id="result">
+         <h2>Result:</h2>
+         <img id="resultImage" style="display:none;"/>
+         <pre id="predictions" style="display:none;"></pre>
+     </div>
+ 
+     <script>
+         const form = document.getElementById('uploadForm');
+         form.onsubmit = async (event) => {
+             event.preventDefault();
+             
+             const formData = new FormData(form);
+             const response = await fetch('/predict/', {
+                 method: 'POST',
+                 body: formData
+             });
+             
+             const resultDiv = document.getElementById('result');
+             const img = document.getElementById('resultImage');
+             const predictions = document.getElementById('predictions');
+ 
+             if (response.headers.get('content-type') === 'application/json') {
+                 const data = await response.json();
+                 img.style.display = 'none';
+                 predictions.style.display = 'block';
+                 predictions.textContent = data.message;
+             } else {
+                 const blob = await response.blob();
+                 img.src = URL.createObjectURL(blob);
+                 img.style.display = 'block';
+                 predictions.style.display = 'none';
+             }
+         };
+     </script>
+ </body>
+ </html>
